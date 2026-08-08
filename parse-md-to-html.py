@@ -3,6 +3,7 @@ import time
 
 PATH_INPUT = "./input/"
 PATH_OUTPUT = "./output/"
+TEMPLATE_HTML = "./template.html"
 
 def get_file_creation_date(file):
     created_seconds = os.path.getctime(PATH_INPUT + file)
@@ -27,7 +28,7 @@ def create_html_file(md_file):
     
     htmlContent = ""
 
-    with open("./template.html") as template:
+    with open(TEMPLATE_HTML) as template:
         htmlContent = template.read()
     
     htmlContent = htmlContent.replace("[title]", file.replace(".md", ""))
