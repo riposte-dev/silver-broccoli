@@ -1,12 +1,11 @@
-markdownContent = ""
-path = "./input/test.md"
+import os
 
-with open(path) as content:
-    markdownContent = content.read()
+PATH_INPUT = "./input"
+PATH_OUTPUT = "./output"
 
-def create_html_file():
+def create_html_file(md_file):
     htmlTemplate = ""
-    htmlFile = open("./output/test.html", "w") # Create new or overwrite old file
+    htmlFile = open(PATH_OUTPUT + "/" + md_file.replace(".md", ".html"), "w") # Create new or overwrite old file
 
     with open("./template.html") as template:
         htmlTemplate = template.read()
@@ -17,4 +16,11 @@ def create_html_file():
     
     htmlFile.write(htmlContent)
 
-create_html_file()
+for file in os.listdir(PATH_INPUT):
+    print("Parsing " + file + "...")
+    
+    markdownContent = ""
+    with open(PATH_INPUT + "/" + file) as content:
+        markdownContent = content.read()
+
+    create_html_file(file)
