@@ -1,11 +1,11 @@
 import os
 import time
 
-PATH_INPUT = "./input"
-PATH_OUTPUT = "./output"
+PATH_INPUT = "./input/"
+PATH_OUTPUT = "./output/"
 
 def get_file_creation_date(file):
-    created_seconds = os.path.getctime(PATH_INPUT + "/" + file)
+    created_seconds = os.path.getctime(PATH_INPUT + file)
     created_formatted = time.ctime(created_seconds)
 
     time_object = time.strptime(created_formatted)
@@ -14,7 +14,7 @@ def get_file_creation_date(file):
     return date
 
 def get_file_modified_date(file):
-    modified_seconds = os.path.getmtime(PATH_INPUT + "/" + file)
+    modified_seconds = os.path.getmtime(PATH_INPUT + file)
     modified_formatted = time.ctime(modified_seconds)
     
     time_object = time.strptime(modified_formatted)
@@ -23,7 +23,7 @@ def get_file_modified_date(file):
     return date
 
 def create_html_file(md_file):
-    htmlFile = open(PATH_OUTPUT + "/" + md_file.replace(".md", ".html"), "w") # Create new or overwrite old file
+    htmlFile = open(PATH_OUTPUT + md_file.replace(".md", ".html"), "w") # Create new or overwrite old file
     
     htmlContent = ""
 
@@ -45,7 +45,7 @@ for file in os.listdir(PATH_INPUT):
     
     markdownContent = ""
 
-    with open(PATH_INPUT + "/" + file, "r") as content:
+    with open(PATH_INPUT + file, "r") as content:
         markdownContent = content.read()
 
     create_html_file(file)
