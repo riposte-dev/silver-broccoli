@@ -1,7 +1,7 @@
 markdownContent = ""
-input = open("./input/test.md", "r")
+path = "./input/test.md"
 
-markdownContent = input.read()
+with open(path) as content:
+    markdownContent = content.read()
+
 print(markdownContent)
-
-input.close()
