@@ -11,8 +11,10 @@ def create_html_file(md_file):
         htmlTemplate = template.read()
     
     # Insert markdown content into the body of the html file
-    bodyIndex = htmlTemplate.find("<body>")
-    htmlContent = htmlTemplate[:bodyIndex + 6] + "\n" + markdownContent + htmlTemplate[bodyIndex + 6:] # 6 is the string length of "<body>"
+    bodyIndex = htmlTemplate.find("</body>")
+    htmlContent = htmlTemplate[:bodyIndex] + markdownContent + "\n" + htmlTemplate[bodyIndex:]
+
+    htmlContent = htmlContent.replace("[title]", file.replace(".md", ""))
     
     htmlFile.write(htmlContent)
 
