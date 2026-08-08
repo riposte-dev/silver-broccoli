@@ -1,6 +1,7 @@
+markdownContent = ""
 input = open("./input/test.md", "r")
 
-for file in input:
-    print(file)
+markdownContent = input.read()
+print(markdownContent)
 
 input.close()
