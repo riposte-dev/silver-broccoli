@@ -4,13 +4,14 @@ import time
 PATH_INPUT = "./input/"
 PATH_OUTPUT = "./output/"
 TEMPLATE_HTML = "./template.html"
+DATE_FORMAT = "%Y.%m.%d"
 
 def get_file_creation_date(file):
     created_seconds = os.path.getctime(PATH_INPUT + file)
     created_formatted = time.ctime(created_seconds)
 
     time_object = time.strptime(created_formatted)
-    date = time.strftime("%Y %m %d", time_object)
+    date = time.strftime(DATE_FORMAT, time_object)
 
     return date
 
@@ -19,7 +20,7 @@ def get_file_modified_date(file):
     modified_formatted = time.ctime(modified_seconds)
     
     time_object = time.strptime(modified_formatted)
-    date = time.strftime("%Y %m %d", time_object)
+    date = time.strftime(DATE_FORMAT, time_object)
 
     return date
 
