@@ -38,6 +38,9 @@ def create_html_file(md_file):
     htmlFile.write(htmlContent)
 
 for file in os.listdir(PATH_INPUT):
+    if file == ".DS_Store":
+        continue
+
     print("Parsing " + file + "...")
     
     markdownContent = ""
