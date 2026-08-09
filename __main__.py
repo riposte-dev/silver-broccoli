@@ -1,5 +1,5 @@
-import os # For opening, reading, and writing files
-import time # For time stamps
+import os
+import time
 
 
 PATH_INPUT = "./input/" # Directory for all source files in markdown
