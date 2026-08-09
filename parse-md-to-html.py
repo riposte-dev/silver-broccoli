@@ -1,10 +1,22 @@
-import os
-import time
+import os # For opening, reading, and writing files
+import time # For time stamps
 
-PATH_INPUT = "./input/"
-PATH_OUTPUT = "./output/"
+
+PATH_INPUT = "./input/" # Directory for all source files in markdown
+PATH_OUTPUT = "./output/" # Directory for all generated html
 TEMPLATE_HTML = "./template.html"
-DATE_FORMAT = "%Y.%m.%d"
+DATE_FORMAT = "%Y.%m.%d" # Default format for get_file_creation_date() and get_file_modified_date()
+
+def get_file_name(file):
+    file_name = ""
+
+    for i in range(len(file) - 1, 0, -1):
+        if (file[i] == "."):
+            file_name = file[0:i]
+            break
+
+    return file_name
+
 
 def get_file_creation_date(file):
     created_seconds = os.path.getctime(PATH_INPUT + file)
@@ -15,6 +27,7 @@ def get_file_creation_date(file):
 
     return date
 
+
 def get_file_modified_date(file):
     modified_seconds = os.path.getmtime(PATH_INPUT + file)
     modified_formatted = time.ctime(modified_seconds)
@@ -23,6 +36,7 @@ def get_file_modified_date(file):
     date = time.strftime(DATE_FORMAT, time_object)
 
     return date
+
 
 def find_new_lines(content):
     content_formatted = "" # Return markdown content formatted for html
@@ -60,27 +74,33 @@ def find_new_lines(content):
     
     return content_formatted
 
-def create_html_file(md_file):
-    htmlFile = open(PATH_OUTPUT + md_file.replace(".md", ".html"), "w") # Create new or overwrite old file
-    
-    htmlContent = ""
 
+def generate_html_file(md_file):
+    # Read content from files
+    markdown_content = ""
+    with open(PATH_INPUT + md_file, "r") as content:
+        markdown_content = content.read()
+
+    html_content = ""
     with open(TEMPLATE_HTML) as template:
-        htmlContent = template.read()
-
-    htmlContent = htmlContent.replace("[title]", file.replace(".md", ""))
-    htmlContent = htmlContent.replace("[content]", find_new_lines(markdownContent))
-    htmlContent = htmlContent.replace("[created]", get_file_creation_date(md_file))
-    htmlContent = htmlContent.replace("[updated]", get_file_modified_date(md_file))
+        html_content = template.read() # Copy html boilerplate from template file
     
-    htmlFile.write(htmlContent)
+    html_file = open(PATH_OUTPUT + md_file.replace(".md", ".html"), "w") # Create new or overwrite old file
 
-for file in os.listdir(PATH_INPUT):
-    print("Parsing " + file + "...")
+    # Fill out placeholders
+    html_content = html_content.replace("[title]", get_file_name(md_file))
+    html_content = html_content.replace("[content]", find_new_lines(markdown_content))
+    html_content = html_content.replace("[created]", get_file_creation_date(md_file))
+    html_content = html_content.replace("[updated]", get_file_modified_date(md_file))
     
-    markdownContent = ""
+    return html_file.write(html_content) # Write the formatted content to html file
 
-    with open(PATH_INPUT + file, "r") as content:
-        markdownContent = content.read()
 
-    create_html_file(file)
+# Generate html (to ./output) for every markdown file (in ./input)
+for md_file in os.listdir(PATH_INPUT):
+    if (md_file.endswith(".md") == False):
+        continue # Ignore any files that aren't markdown
+
+    print("Parsing " + md_file + "...")
+    generate_html_file(md_file)
+
