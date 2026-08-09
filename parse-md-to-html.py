@@ -38,6 +38,52 @@ def get_file_modified_date(file):
 
     return date
 
+def format_math_environment(lines):
+    """
+    Math block environments are defined like so:
+    $$
+    equation
+    $$
+
+    Parse to html by containing it in a divider:
+    <div>
+    $$
+    equation
+    $$
+    </div>
+
+    MathJaX will automatically detect "$$" delimiters and render them
+    """
+
+    # Create a list of indexes of all math delimiters
+    math_delimiter_indexes = []
+
+    # Find all "$$" delimiters
+    for i in range(0, len(lines)):
+        if lines[i] == "$$":
+            math_delimiter_indexes.append(i)
+
+    # Since "$$" delimiters come in pairs, add "<div>" to the first and "</div" to the second
+    # Add opening <div> tag to first $$
+    for i in range(0, len(math_delimiter_indexes), 2):
+        math_delimiter_index = math_delimiter_indexes[i]
+        lines[math_delimiter_index] = "<div>\n" + lines[math_delimiter_index]
+    
+    # Add closing </div> tag to second $$
+    for i in range(0, len(math_delimiter_indexes), 2):
+        math_delimiter_index = math_delimiter_indexes[i+1] # Add to every other index
+        lines[math_delimiter_index] = lines[math_delimiter_index] + "\n</div>"
+    
+    # Finally, return a list of indexes of all math environment lines, including the delimiters
+    math_environment_indexes = []
+
+    # Since "$$" delimiters come in pairs, treat them as closed intervals where every index in between is also a math environment
+    for i in range(0, len(math_delimiter_indexes), 2):
+        for j in range(math_delimiter_indexes[i], math_delimiter_indexes[i+1] + 1): # From 'i' to 'i+1'
+            math_environment_indexes.append(j)
+    
+    return math_environment_indexes
+
 
 def format_md_content(md_content):
     html_body_content = ""
@@ -47,26 +93,22 @@ def format_md_content(md_content):
     # Remove any empty, new lines
     while "" in lines:
         lines.remove("")
-    
-    math_block_indexes = [] # A list of indexes of all "$$" delimiters
 
+    # Create a list of indexes of all lines that are plain text
+    text_environment_indexes = []
+
+    # Assume that a line is text by default
+    # Otherwise, we remove the line's index from text_environment_indexes
     for i in range(0, len(lines)):
-        if lines[i] == "$$":
-            math_block_indexes.append(i)
+        text_environment_indexes.append(i)
     
-    # Create a version of 'lines' that stores indexes of elements
-    paragraph_indexes = [] # A list of indexes of all text paragraphs
+    # Math environment
+    math_environment_indexes = format_math_environment(lines)
 
-    for i in range(0, len(lines)):
-        paragraph_indexes.append(i)
+    for i in math_environment_indexes:
+        text_environment_indexes.remove(i)
     
-    # Remove the indexes of any lines in a math environment
-    for i in range(0, len(math_block_indexes), 2):
-        for j in range(math_block_indexes[i], math_block_indexes[i+1] + 1):
-            paragraph_indexes.remove(j)
-
-    # Apply html paragraph element to remaining lines
-    for i in paragraph_indexes:
+    for i in text_environment_indexes:
         lines[i] = "<p>" + lines[i] + "</p>"
     
     # Sum the content into html format
@@ -83,7 +125,7 @@ def generate_html_file(md_file):
         md_content = content.read()
 
     html_content = ""
-    with open(TEMPLATE_HTML) as template:
+    with open(TEMPLATE_HTML, "r") as template:
         html_content = template.read() # Copy html boilerplate from template file
     
     html_file = open(PATH_OUTPUT + md_file.replace(".md", ".html"), "w") # Create new or overwrite old file
@@ -94,7 +136,7 @@ def generate_html_file(md_file):
     html_content = html_content.replace("[created]", get_file_creation_date(md_file))
     html_content = html_content.replace("[updated]", get_file_modified_date(md_file))
     
-    return html_file.write(html_content) # Write the formatted content to html file
+    html_file.write(html_content) # Write the formatted content to html file
 
 
 # Generate html (to ./output) for every markdown file (in ./input)
@@ -103,5 +145,5 @@ for md_file in os.listdir(PATH_INPUT):
         continue # Ignore any files that aren't markdown
 
     print("Parsing " + md_file + "...")
-    generate_html_file(md_file)
+    html_file = generate_html_file(md_file)
 
