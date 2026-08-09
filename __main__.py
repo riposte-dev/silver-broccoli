@@ -31,49 +31,6 @@ def get_file_modified_date(file):
 
     return date
 
-def format_code_environment(lines):
-    """
-    Code block environments are defined like so:
-    ```
-    code
-    ```
-
-    Parse to html like so:
-    <pre>
-        <code>
-            code
-        </code>
-    </pre>
-    """
-
-    # Create a list of indexes of all code block delimiters
-    code_delimiter_indexes = []
-
-    for i in range(0, len(lines)):
-        if lines[i] == "```":
-            code_delimiter_indexes.append(i)
-
-    # Since "```" delimiters come in pairs, replace the first and second by opening and closing tags, respectively
-    # Replace with opening tags
-    for i in range(0, len(code_delimiter_indexes), 2):
-        code_delimiter_index = code_delimiter_indexes[i]
-        lines[code_delimiter_index] = "<pre>\n<code>\n"
-    
-    # Replace with closing tags
-    for i in range(0, len(code_delimiter_indexes), 2):
-        code_delimiter_index = code_delimiter_indexes[i+1] # Add to every other index
-        lines[code_delimiter_index] = "\n</code>\n</pre>"
-    
-    # Finally, return a list of indexes of all code environment lines, including the delimiters
-    code_environment_indexes = []
-
-    # Since "```" delimiters come in pairs, treat them as closed intervals where every index in between is also a code environment
-    for i in range(0, len(code_delimiter_indexes), 2):
-        for j in range(code_delimiter_indexes[i], code_delimiter_indexes[i+1] + 1): # From 'i' to 'i+1'
-            code_environment_indexes.append(j)
-    
-    return code_environment_indexes
-
 
 def format_math_environment(lines):
     """
@@ -122,6 +79,50 @@ def format_math_environment(lines):
             math_environment_indexes.append(j)
     
     return math_environment_indexes
+
+
+def format_code_environment(lines):
+    """
+    Code block environments are defined like so:
+    ```
+    code
+    ```
+
+    Parse to html like so:
+    <pre>
+        <code>
+            code
+        </code>
+    </pre>
+    """
+
+    # Create a list of indexes of all code block delimiters
+    code_delimiter_indexes = []
+
+    for i in range(0, len(lines)):
+        if lines[i] == "```":
+            code_delimiter_indexes.append(i)
+
+    # Since "```" delimiters come in pairs, replace the first and second by opening and closing tags, respectively
+    # Replace with opening tags
+    for i in range(0, len(code_delimiter_indexes), 2):
+        code_delimiter_index = code_delimiter_indexes[i]
+        lines[code_delimiter_index] = "<pre>\n<code>\n"
+    
+    # Replace with closing tags
+    for i in range(0, len(code_delimiter_indexes), 2):
+        code_delimiter_index = code_delimiter_indexes[i+1] # Add to every other index
+        lines[code_delimiter_index] = "\n</code>\n</pre>"
+    
+    # Finally, return a list of indexes of all code environment lines, including the delimiters
+    code_environment_indexes = []
+
+    # Since "```" delimiters come in pairs, treat them as closed intervals where every index in between is also a code environment
+    for i in range(0, len(code_delimiter_indexes), 2):
+        for j in range(code_delimiter_indexes[i], code_delimiter_indexes[i+1] + 1): # From 'i' to 'i+1'
+            code_environment_indexes.append(j)
+    
+    return code_environment_indexes
 
 
 def format_md_content(md_content):
