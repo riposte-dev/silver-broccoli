@@ -8,15 +8,8 @@ TEMPLATE_HTML = "./template.html"
 DATE_FORMAT = "%Y.%m.%d" # Default format for get_file_creation_date() and get_file_modified_date()
 
 def get_file_name(file):
-    file_name = ""
-
-    for i in range(len(file) - 1, 0, -1):
-        # Find the last instance of "." in 'file' (i.e. "file.extension")
-        if (file[i] == "."):
-            file_name = file[0:i]
-            break
-
-    return file_name
+    # os.path.splitext returns ["file_name", "file_extension"]
+    return os.path.splitext(file)[0]
 
 
 def get_file_creation_date(file):
