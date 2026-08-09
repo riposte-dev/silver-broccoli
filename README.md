@@ -1,2 +1,2 @@
-# Silver Broccoli
-A Python script for generating HTML files from Markdown files
+# Sendai SSG
+A static site generator that uses a Python script to generate HTML from Markdown files.
