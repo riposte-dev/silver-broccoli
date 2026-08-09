@@ -38,6 +38,7 @@ def get_file_modified_date(file):
 
     return date
 
+
 def format_math_environment(lines):
     """
     Math block environments are defined like so:
