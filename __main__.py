@@ -132,6 +132,8 @@ def generate_html_file(md_file):
     
     html_file.write(html_content) # Write the formatted content to html file
 
+    return md_file.replace(".md", ".html")
+
 
 def main():
     # Generate html (to ./output) for every markdown file (in ./input)
