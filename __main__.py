@@ -125,6 +125,13 @@ def format_code_environment(lines):
     return code_environment_indexes
 
 
+def format_text_environment(lines):
+    for line in lines:
+        line = "<p>" + line + "</p>"
+    
+    return lines
+
+
 def format_md_content(md_content):
     html_body_content = ""
 
@@ -156,9 +163,8 @@ def format_md_content(md_content):
         text_environment_indexes.remove(i)
     
     # Treat the remaining lines as plain text
-    for i in text_environment_indexes:
-        lines[i] = "<p>" + lines[i] + "</p>"
-    
+    format_text_environment(lines)
+
     # Sum the content into html format
     for line in lines:
         html_body_content += line + "\n"
