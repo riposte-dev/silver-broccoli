@@ -140,11 +140,15 @@ def generate_html_file(md_file):
     html_file.write(html_content) # Write the formatted content to html file
 
 
-# Generate html (to ./output) for every markdown file (in ./input)
-for md_file in os.listdir(PATH_INPUT):
-    if (md_file.endswith(".md") == False):
-        continue # Ignore any files that aren't markdown
+def main():
+    # Generate html (to ./output) for every markdown file (in ./input)
+    for md_file in os.listdir(PATH_INPUT):
+        if (md_file.endswith(".md") == False):
+            continue # Ignore any files that aren't markdown
 
-    print("Parsing " + md_file + "...")
-    html_file = generate_html_file(md_file)
+        print("Parsing " + md_file + "...")
+        html_file = generate_html_file(md_file)
 
+
+if __name__=="__main__":
+    main()
