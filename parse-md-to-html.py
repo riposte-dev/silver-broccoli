@@ -11,6 +11,7 @@ def get_file_name(file):
     file_name = ""
 
     for i in range(len(file) - 1, 0, -1):
+        # Find the last instance of "." in 'file' (i.e. "file.extension")
         if (file[i] == "."):
             file_name = file[0:i]
             break
