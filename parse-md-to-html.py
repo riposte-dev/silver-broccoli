@@ -47,7 +47,7 @@ def format_math_environment(lines):
     $$
 
     Parse to html by containing it in a divider:
-    <div>
+    <div class="math-block">
     $$
     equation
     $$
@@ -68,7 +68,7 @@ def format_math_environment(lines):
     # Add opening <div> tag to first $$
     for i in range(0, len(math_delimiter_indexes), 2):
         math_delimiter_index = math_delimiter_indexes[i]
-        lines[math_delimiter_index] = "<div>\n" + lines[math_delimiter_index]
+        lines[math_delimiter_index] = "<div class='math-block'>\n" + lines[math_delimiter_index]
     
     # Add closing </div> tag to second $$
     for i in range(0, len(math_delimiter_indexes), 2):
