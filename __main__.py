@@ -31,6 +31,49 @@ def get_file_modified_date(file):
 
     return date
 
+def format_code_environment(lines):
+    """
+    Code block environments are defined like so:
+    ```
+    code
+    ```
+
+    Parse to html like so:
+    <pre>
+        <code>
+            code
+        </code>
+    </pre>
+    """
+
+    # Create a list of indexes of all code block delimiters
+    code_delimiter_indexes = []
+
+    for i in range(0, len(lines)):
+        if lines[i] == "```":
+            code_delimiter_indexes.append(i)
+
+    # Since "```" delimiters come in pairs, replace the first and second by opening and closing tags, respectively
+    # Replace with opening tags
+    for i in range(0, len(code_delimiter_indexes), 2):
+        code_delimiter_index = code_delimiter_indexes[i]
+        lines[code_delimiter_index] = "<pre>\n<code>\n"
+    
+    # Replace with closing tags
+    for i in range(0, len(code_delimiter_indexes), 2):
+        code_delimiter_index = code_delimiter_indexes[i+1] # Add to every other index
+        lines[code_delimiter_index] = "\n</code>\n</pre>"
+    
+    # Finally, return a list of indexes of all code environment lines, including the delimiters
+    code_environment_indexes = []
+
+    # Since "```" delimiters come in pairs, treat them as closed intervals where every index in between is also a code environment
+    for i in range(0, len(code_delimiter_indexes), 2):
+        for j in range(code_delimiter_indexes[i], code_delimiter_indexes[i+1] + 1): # From 'i' to 'i+1'
+            code_environment_indexes.append(j)
+    
+    return code_environment_indexes
+
 
 def format_math_environment(lines):
     """
@@ -39,7 +82,7 @@ def format_math_environment(lines):
     equation
     $$
 
-    Parse to html by containing it in a divider:
+    Parse to html like so:
     <div class="math-block">
     $$
     equation
@@ -47,9 +90,11 @@ def format_math_environment(lines):
     </div>
 
     MathJaX will automatically detect "$$" delimiters and render them
+
+    In-line delimiters "$" are rendered automatically as well so no need to check for them
     """
 
-    # Create a list of indexes of all math delimiters
+    # Create a list of indexes of all math block delimiters
     math_delimiter_indexes = []
 
     # Find all "$$" delimiters
@@ -88,6 +133,7 @@ def format_md_content(md_content):
     while "" in lines:
         lines.remove("")
 
+    # Text environment
     # Create a list of indexes of all lines that are plain text
     text_environment_indexes = []
 
@@ -96,12 +142,19 @@ def format_md_content(md_content):
     for i in range(0, len(lines)):
         text_environment_indexes.append(i)
     
-    # Math environment
+    # Math block environment
     math_environment_indexes = format_math_environment(lines)
 
     for i in math_environment_indexes:
         text_environment_indexes.remove(i)
     
+    # Code block environment
+    code_environment_indexes = format_code_environment(lines)
+
+    for i in code_environment_indexes:
+        text_environment_indexes.remove(i)
+    
+    # Treat the remaining lines as plain text
     for i in text_environment_indexes:
         lines[i] = "<p>" + lines[i] + "</p>"
     
