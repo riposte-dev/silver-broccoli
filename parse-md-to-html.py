@@ -39,10 +39,10 @@ def get_file_modified_date(file):
     return date
 
 
-def find_new_lines(content):
-    content_formatted = "" # Return markdown content formatted for html
+def format_md_content(md_content):
+    html_body_content = ""
 
-    lines = content.split("\n") # Create a list of all lines in markdown content
+    lines = md_content.split("\n") # Create a list of all lines in markdown content
 
     # Remove any empty, new lines
     while "" in lines:
@@ -71,16 +71,16 @@ def find_new_lines(content):
     
     # Sum the content into html format
     for line in lines:
-        content_formatted += line + "\n"
+        html_body_content += line + "\n"
     
-    return content_formatted
+    return html_body_content
 
 
 def generate_html_file(md_file):
     # Read content from files
-    markdown_content = ""
+    md_content = ""
     with open(PATH_INPUT + md_file, "r") as content:
-        markdown_content = content.read()
+        md_content = content.read()
 
     html_content = ""
     with open(TEMPLATE_HTML) as template:
@@ -90,7 +90,7 @@ def generate_html_file(md_file):
 
     # Fill out placeholders
     html_content = html_content.replace("[title]", get_file_name(md_file))
-    html_content = html_content.replace("[content]", find_new_lines(markdown_content))
+    html_content = html_content.replace("[content]", format_md_content(md_content))
     html_content = html_content.replace("[created]", get_file_creation_date(md_file))
     html_content = html_content.replace("[updated]", get_file_modified_date(md_file))
     
