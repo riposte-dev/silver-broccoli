@@ -8,7 +8,7 @@ TEMPLATE_HTML = "./template.html"
 DATE_FORMAT = "%Y.%m.%d" # Default format for get_file_creation_date() and get_file_modified_date()
 
 def get_file_name(file):
-    # os.path.splitext returns ["file_name", "file_extension"]
+    # os.path.splitext(file) returns ["file_name", "file_extension"]
     return os.path.splitext(file)[0]
 
 
