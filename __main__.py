@@ -107,7 +107,7 @@ def format_code_environment(lines):
     # Replace with opening tags
     for i in range(0, len(code_delimiter_indexes), 2):
         code_delimiter_index = code_delimiter_indexes[i]
-        lines[code_delimiter_index] = "<pre>\n<code>\n"
+        lines[code_delimiter_index] = "<pre>\n<code class='language-c'>\n"
     
     # Replace with closing tags
     for i in range(0, len(code_delimiter_indexes), 2):
