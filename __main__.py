@@ -84,30 +84,40 @@ def format_math_environment(lines):
 def format_code_environment(lines):
     """
     Code block environments are defined like so:
-    ```
+    ```language
     code
     ```
 
     Parse to html like so:
     <pre>
-        <code>
+        <code class="language">
             code
         </code>
     </pre>
+
+    By adding a CSS class like 'language-c' to <code>, Prism.js will automatically add syntax highlighting
     """
 
     # Create a list of indexes of all code block delimiters
     code_delimiter_indexes = []
 
     for i in range(0, len(lines)):
-        if lines[i] == "```":
+        # Users can label a language for the code block, so a valid code line may be "```" or "```language"
+        if lines[i][0:3] == "```":
             code_delimiter_indexes.append(i)
 
     # Since "```" delimiters come in pairs, replace the first and second by opening and closing tags, respectively
     # Replace with opening tags
     for i in range(0, len(code_delimiter_indexes), 2):
         code_delimiter_index = code_delimiter_indexes[i]
-        lines[code_delimiter_index] = "<pre>\n<code class='language-c'>\n"
+
+        # No labelled coding language, wrap in code tag with no class
+        if (lines[code_delimiter_index] == "```"):
+            lines[code_delimiter_index] = "<pre class='code-block'>\n<code>\n"
+        # There exists a labelled coding language, add class to code tag
+        else:
+            coding_language = lines[code_delimiter_index][3:]
+            lines[code_delimiter_index] = "<pre class='code-block'>\n<code class='language-" + coding_language + "'>\n"
     
     # Replace with closing tags
     for i in range(0, len(code_delimiter_indexes), 2):
