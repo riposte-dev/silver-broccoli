@@ -84,13 +84,14 @@ def format_math_environment(lines):
 def format_code_environment(lines):
     """
     Code block environments are defined like so:
-    ```language
+    ```lang
     code
     ```
+    (where 'lang' is an optional label that users can add to specify coding language)
 
     Parse to html like so:
     <pre>
-        <code class="language">
+        <code class="language-lang">
             code
         </code>
     </pre>
