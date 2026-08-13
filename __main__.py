@@ -1,7 +1,6 @@
 import os
 import time
 
-
 PATH_INPUT = "./input/" # Directory for all source files in markdown
 PATH_OUTPUT = "./output/" # Directory for all generated html
 TEMPLATE_HTML = "./template.html"
@@ -136,10 +135,44 @@ def format_code_environment(lines):
     return code_environment_indexes
 
 
+def find_matches(delimiter, string):
+    first_index = string.find(delimiter)
+
+    if (first_index == -1):
+        return []
+        
+    second_index = string.find(delimiter, first_index + 1)
+
+    if (second_index == -1):
+        return []
+    
+    delimiter_length = len(delimiter)
+    match = string[first_index:second_index + delimiter_length]
+
+    return [match] + find_matches(delimiter, string[second_index + delimiter_length:])
+
+
+def format_text_line(line):
+    # Check for bolded
+    bolded = find_matches("**", line) # Any text of the form: **text**
+
+    for match in bolded:
+        line = line.replace(match, "<strong>" + match[2:-2] + "</strong>") # Replace **'s with html tags
+
+    # Check for italicized
+    italicized = find_matches("*", line) + find_matches("_", line) # Italics denoted by *text* or _text_
+
+    for match in italicized:
+        line = line.replace(match, "<em>" + match[1:-1] + "</em>") # Replace * or _ with html tags
+    
+    return line
+
+
 def format_text_environment(lines, text_environment_indexes):
     for i in text_environment_indexes:
+        lines[i] = format_text_line(lines[i])
         lines[i] = "<p>" + lines[i] + "</p>"
-    
+
     return lines
 
 
