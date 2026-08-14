@@ -34,7 +34,7 @@ def check_for_math_delimiters(lines):
 
 def check_for_math_environment(lines):
     """
-    Given a list of lines from a Markdown file, return a list of indexes whose lines are in a math environment
+    Given a list of lines from a Markdown file, return a list of indexes whose lines are in a math block environment
     """
 
     math_delimiter_indexes = check_for_math_delimiters(lines)
