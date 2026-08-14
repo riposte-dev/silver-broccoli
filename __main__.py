@@ -7,7 +7,6 @@ PATH_OUTPUT = "./output/" # Directory for all generated html
 TEMPLATE_HTML = "./template.html"
 DATE_FORMAT = "%Y.%m.%d" # Default format for get_file_creation_date() and get_file_modified_date()
 
-
 def format_math_environment(lines):
     """
     Math block environments are defined like so:
