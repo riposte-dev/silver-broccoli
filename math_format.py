@@ -39,7 +39,7 @@ def check_for_math_environment(lines):
 
     math_delimiter_indexes = check_for_math_delimiters(lines)
     
-    # Create a list of indexes for all lines in a math environment, including the delimiters
+    # Create a list of indexes for all lines in a math block environment, including the delimiters
     math_environment_indexes = []
 
     # Since "$$" delimiters come in pairs, treat them as closed intervals where every index in between is also a math environment
