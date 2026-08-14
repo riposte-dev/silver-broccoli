@@ -1,34 +1,11 @@
 import os
 import time
+import file_metadata
 
 PATH_INPUT = "./input/" # Directory for all source files in markdown
 PATH_OUTPUT = "./output/" # Directory for all generated html
 TEMPLATE_HTML = "./template.html"
 DATE_FORMAT = "%Y.%m.%d" # Default format for get_file_creation_date() and get_file_modified_date()
-
-def get_file_name(file):
-    # os.path.splitext(file) returns ["file_name", "file_extension"]
-    return os.path.splitext(file)[0]
-
-
-def get_file_creation_date(file):
-    created_seconds = os.path.getctime(PATH_INPUT + file)
-    created_formatted = time.ctime(created_seconds)
-
-    time_object = time.strptime(created_formatted)
-    date = time.strftime(DATE_FORMAT, time_object)
-
-    return date
-
-
-def get_file_modified_date(file):
-    modified_seconds = os.path.getmtime(PATH_INPUT + file)
-    modified_formatted = time.ctime(modified_seconds)
-    
-    time_object = time.strptime(modified_formatted)
-    date = time.strftime(DATE_FORMAT, time_object)
-
-    return date
 
 
 def format_math_environment(lines):
@@ -249,10 +226,10 @@ def generate_html_file(md_file):
     html_file = open(PATH_OUTPUT + md_file.replace(".md", ".html"), "w") # Create new or overwrite old file
 
     # Fill out placeholders
-    html_content = html_content.replace("[title]", get_file_name(md_file))
+    html_content = html_content.replace("[title]", file_metadata.get_file_name(md_file))
     html_content = html_content.replace("[content]", format_md_content(md_content))
-    html_content = html_content.replace("[created]", get_file_creation_date(md_file))
-    html_content = html_content.replace("[updated]", get_file_modified_date(md_file))
+    html_content = html_content.replace("[created]", file_metadata.get_file_creation_date(md_file))
+    html_content = html_content.replace("[updated]", file_metadata.get_file_modified_date(md_file))
     
     html_file.write(html_content) # Write the formatted content to html file
 
