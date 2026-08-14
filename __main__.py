@@ -146,11 +146,10 @@ def find_matches(delimiter, string):
     if (second_index == -1):
         return []
 
-    # Check if the special character is in inline $math$ or `code``
+    # Check if the special character is in inline $math$
     dollar_sign_count = 0
 
     for i in range(second_index, -1, -1):
-        print(string[i])
         if (string[i] != "$"):
             continue
 
@@ -161,15 +160,6 @@ def find_matches(delimiter, string):
 
     backtick_count = 0
 
-    for i in range(second_index, -1, -1):
-        if (string[i] != "`"):
-            continue
-        
-        backtick_count += 1
-    
-    if (backtick_count % 2 == 1):
-        return []
-    
     delimiter_length = len(delimiter)
     match = string[first_index:second_index + delimiter_length]
 
@@ -188,6 +178,12 @@ def format_text_line(line):
 
     for match in italicized:
         line = line.replace(match, "<em>" + match[1:-1] + "</em>") # Replace * or _ with html tags
+
+    # Check for inline code
+    inline_code = find_matches("`", line) # Any text of the form: `text`
+
+    for match in inline_code:
+        line = line.replace(match, "<code>" + match[1:-1] + "</code>") # Replace ` with html tags
     
     return line
 
