@@ -11,21 +11,25 @@ def find_matches(delimiter, string):
 
     if (second_index == -1):
         return []
-
-    # Check if the special character is in inline $math$
+    
+    # Check if special character is in inline $math$ or `code`
     dollar_sign_count = 0
-
-    for i in range(second_index, -1, -1):
-        if (string[i] != "$"):
-            continue
-
-        dollar_sign_count += 1
-
-    if (dollar_sign_count % 2 == 1):
-        return []
-
     backtick_count = 0
 
+    for i in range(second_index, -1, -1):
+        letter = string[i]
+
+        if (letter == "$"):
+            dollar_sign_count += 1
+        elif (letter == "`"):
+            backtick_count += 1
+    
+    if (dollar_sign_count % 2 == 1):
+        return []
+    
+    if (backtick_count % 2 == 1):
+        return []
+    
     delimiter_length = len(delimiter)
     match = string[first_index:second_index + delimiter_length]
 
@@ -81,7 +85,7 @@ def check_for_text_environment(lines):
 def format_text_environment(lines):
     """
     Text needs to be formatted before math or code because it seeks to exclude math or code block environments
-    
+
     If math or code is formatted first, check_for_text_environment() cannot properly detect math or code block
     environments (in Markdown format) since they are parsed to html
     """
