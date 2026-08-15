@@ -2,6 +2,15 @@ import math_format
 import code_format
 import blockquote_format
 
+HEADINGS = [
+    "# ", # h1
+    "## ", # h2
+    "### ", # h3
+    "#### ", # h4
+    "##### ", # h5
+    "###### " # h6
+]
+
 def find_matches(delimiter, string):
     first_index = string.find(delimiter)
 
@@ -103,7 +112,16 @@ def format_text_environment(lines):
 
     for i in text_environment_indexes:
         line = format_text_line(lines[i])
-        lines[i] = "<p>" + line + "</p>"
+
+        # Check for headings only if the first character of a line is hashtag
+        if (line[0] == "#"):
+            for heading in HEADINGS:
+                heading_level = len(heading) - 1
+
+                if (line[:heading_level + 1] == heading):
+                    lines[i] = "<h" + str(heading_level) + ">" + line[heading_level:] + "</h" + str(heading_level) + ">"
+        else:
+            lines[i] = "<p>" + line + "</p>"
 
     return lines
 
