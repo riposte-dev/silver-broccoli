@@ -3,6 +3,7 @@ import time
 import file_metadata
 import math_format
 import code_format
+import text_format
 
 PATH_INPUT = "./input/" # Directory for all source files in markdown
 PATH_OUTPUT = "./output/" # Directory for all generated html
@@ -78,30 +79,12 @@ def format_md_content(md_content):
     while "" in lines:
         lines.remove("") # Remove all empty lines
 
-    # Text environment
-    # Create a list of indexes of all lines that are plain text
-    text_environment_indexes = []
-
-    # Assume that a line is text by default
-    # Otherwise, we remove the line's index from text_environment_indexes
-    for i in range(0, len(lines)):
-        text_environment_indexes.append(i)
-    
-    # Math block environment
-    math_environment_indexes = math_format.check_for_math_environment(lines)
-
-    for i in math_environment_indexes:
-        text_environment_indexes.remove(i)
+    text_environment_indexes = text_format.check_for_text_environment(lines)
 
     math_format.format_math_environment(lines)
-
-    # Code block environment
-    code_environment_indexes = code_format.check_for_code_environment(lines)
-
-    for i in code_environment_indexes:
-        text_environment_indexes.remove(i)
     
     code_format.format_code_environment(lines)
+
     
     # Treat the remaining lines as plain text
     format_text_environment(lines, text_environment_indexes)
