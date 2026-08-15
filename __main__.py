@@ -92,12 +92,16 @@ def format_md_content(md_content):
 
     for i in math_environment_indexes:
         text_environment_indexes.remove(i)
-    
+
+    math_format.format_math_environment(lines)
+
     # Code block environment
     code_environment_indexes = code_format.check_for_code_environment(lines)
 
     for i in code_environment_indexes:
         text_environment_indexes.remove(i)
+    
+    code_format.format_code_environment(lines)
     
     # Treat the remaining lines as plain text
     format_text_environment(lines, text_environment_indexes)
