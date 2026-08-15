@@ -10,5 +10,6 @@ Sendai currently supports the following:
 - MathJaX
 - Code
     - Syntax highlighting (PrismJS)
+- Horizontal rules
 
 Please note that Sendai is still in *early* development!

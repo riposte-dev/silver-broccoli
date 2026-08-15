@@ -111,6 +111,13 @@ def format_text_environment(lines):
         return
 
     for i in text_environment_indexes:
+        line = lines[i]
+
+        # Check for horizontal rule
+        if (line in ["---", "___", "***"]):
+            lines[i] = "<hr>"
+            continue
+
         line = format_text_line(lines[i])
 
         # Check for headings only if the first character of a line is hashtag
