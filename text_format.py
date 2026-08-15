@@ -79,6 +79,12 @@ def check_for_text_environment(lines):
 
 
 def format_text_environment(lines):
+    """
+    Text needs to be formatted before math or code because it seeks to exclude math or code block environments
+    
+    If math or code is formatted first, check_for_text_environment() cannot properly detect math or code block
+    environments (in Markdown format) since they are parsed to html
+    """
     text_environment_indexes = check_for_text_environment(lines)
 
     for i in text_environment_indexes:

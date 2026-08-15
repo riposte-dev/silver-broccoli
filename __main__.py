@@ -17,7 +17,8 @@ def format_md_content(md_content):
     while "" in lines:
         lines.remove("") 
 
-    text_format.format_text_environment(lines)
+    # Parse all lines by their appropriate environment
+    text_format.format_text_environment(lines) # Text needs to be formatted first (See format_text_environment())
     math_format.format_math_environment(lines)
     code_format.format_code_environment(lines)
 
