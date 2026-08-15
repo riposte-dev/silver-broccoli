@@ -13,12 +13,12 @@ body {
 }
 
 blockquote {
-    border-left: 4px solid white;
+    border-left: 4px solid pink;
     padding-left: 8px;
 }
 
 a {
-    color: white;
+    color: pink;
 }
 
 .key-word {
