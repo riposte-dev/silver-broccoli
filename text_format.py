@@ -1,5 +1,6 @@
 import math_format
 import code_format
+import blockquote_format
 
 def find_matches(delimiter, string):
     first_index = string.find(delimiter)
@@ -79,16 +80,13 @@ def check_for_text_environment(lines):
     for i in code_environment_indexes:
         text_environment_indexes.remove(i)
     
-    return text_environment_indexes
+    # Remove all lines in a block quote environment
+    blockquote_indexes = blockquote_format.check_for_blockquotes(lines)
 
-
-def check_line_for_blockquote(line):
-    is_blockquote = False
-
-    if (line[:2] == "> "):
-        is_blockquote = True
+    for i in blockquote_indexes:
+        text_environment_indexes.remove(i)
     
-    return is_blockquote
+    return text_environment_indexes
 
 
 def format_text_environment(lines):
@@ -101,14 +99,8 @@ def format_text_environment(lines):
     text_environment_indexes = check_for_text_environment(lines)
 
     for i in text_environment_indexes:
-        line = lines[i]
-
-        if (check_line_for_blockquote(line)):
-            line = format_text_line(line)
-            lines[i] = "<blockquote>" + line[2:] + "</blockquote>" # Remove "> " at beginning of line
-        else:
-            line = format_text_line(line)
-            lines[i] = "<p>" + line + "</p>"
+        line = format_text_line(lines[i])
+        lines[i] = "<p>" + line + "</p>"
 
     return lines
 
