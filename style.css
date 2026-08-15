@@ -16,3 +16,7 @@ blockquote {
     border-left: 4px solid white;
     padding-left: 8px;
 }
+
+a {
+    color: white;
+}
