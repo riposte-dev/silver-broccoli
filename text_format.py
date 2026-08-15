@@ -67,19 +67,28 @@ def check_for_text_environment(lines):
     for i in range(0, len(lines)):
         text_environment_indexes.append(i)
     
-    # Math block environment
+    # Remove all lines in a math block environment
     math_environment_indexes = math_format.check_for_math_environment(lines)
 
     for i in math_environment_indexes:
         text_environment_indexes.remove(i)
 
-    # Code block environment
+    # Remove all lines in a code block environment
     code_environment_indexes = code_format.check_for_code_environment(lines)
 
     for i in code_environment_indexes:
         text_environment_indexes.remove(i)
     
     return text_environment_indexes
+
+
+def check_line_for_blockquote(line):
+    is_blockquote = False
+
+    if (line[:2] == "> "):
+        is_blockquote = True
+    
+    return is_blockquote
 
 
 def format_text_environment(lines):
@@ -92,8 +101,14 @@ def format_text_environment(lines):
     text_environment_indexes = check_for_text_environment(lines)
 
     for i in text_environment_indexes:
-        lines[i] = format_text_line(lines[i])
-        lines[i] = "<p>" + lines[i] + "</p>"
+        line = lines[i]
+
+        if (check_line_for_blockquote(line)):
+            line = format_text_line(line)
+            lines[i] = "<blockquote>" + line[2:] + "</blockquote>" # Remove "> " at beginning of line
+        else:
+            line = format_text_line(line)
+            lines[i] = "<p>" + line + "</p>"
 
     return lines
 

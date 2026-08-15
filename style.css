@@ -11,3 +11,8 @@ body {
     max-width: 50%;
     margin: auto;
 }
+
+blockquote {
+    border-left: 4px solid white;
+    padding-left: 8px;
+}
