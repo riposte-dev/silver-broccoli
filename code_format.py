@@ -52,6 +52,9 @@ def check_for_code_environment(lines):
 def format_code_environment(lines):
     code_delimiter_indexes = check_for_code_delimiters(lines)
 
+    if (code_delimiter_indexes == []):
+        return
+
     # Since "```" delimiters come in pairs, replace the first and second by opening and closing tags, respectively
     # Replace with opening tags
     for i in range(0, len(code_delimiter_indexes), 2):

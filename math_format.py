@@ -53,6 +53,9 @@ def check_for_math_environment(lines):
 def format_math_environment(lines):
     math_delimiter_indexes = check_for_math_delimiters(lines)
 
+    if (math_delimiter_indexes == []):
+        return
+
     # Since "$$" delimiters come in pairs, add "<div>" to the first and "</div>" to the second
     # Add opening <div> tag to first $$
     for i in range(0, len(math_delimiter_indexes), 2):

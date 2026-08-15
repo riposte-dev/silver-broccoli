@@ -98,6 +98,9 @@ def format_text_environment(lines):
     """
     text_environment_indexes = check_for_text_environment(lines)
 
+    if (text_environment_indexes == []):
+        return
+
     for i in text_environment_indexes:
         line = format_text_line(lines[i])
         lines[i] = "<p>" + line + "</p>"

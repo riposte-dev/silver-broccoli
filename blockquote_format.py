@@ -52,6 +52,9 @@ def sort_blockquote_indexes(blockquote_indexes):
 def format_blockquotes(lines):
     blockquote_indexes = check_for_blockquotes(lines)
 
+    if (blockquote_indexes == []):
+        return
+
     # Format text in lines contained inside blockquote
     for i in blockquote_indexes:
         line = text_format.format_text_line(lines[i])
