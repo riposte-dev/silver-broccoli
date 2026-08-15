@@ -20,3 +20,8 @@ blockquote {
 a {
     color: white;
 }
+
+.key-word {
+    color:pink;
+    font-weight: 700;
+}
