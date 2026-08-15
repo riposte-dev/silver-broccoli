@@ -1,93 +1,27 @@
 import os
 import time
 import file_metadata
+import text_format
 import math_format
 import code_format
-import text_format
 
 PATH_INPUT = "./input/" # Directory for all source files in markdown
 PATH_OUTPUT = "./output/" # Directory for all generated html
 TEMPLATE_HTML = "./template.html"
 DATE_FORMAT = "%Y.%m.%d" # Default format for get_file_creation_date() and get_file_modified_date()
 
-def find_matches(delimiter, string):
-    first_index = string.find(delimiter)
-
-    if (first_index == -1):
-        return []
-        
-    second_index = string.find(delimiter, first_index + 1)
-
-    if (second_index == -1):
-        return []
-
-    # Check if the special character is in inline $math$
-    dollar_sign_count = 0
-
-    for i in range(second_index, -1, -1):
-        if (string[i] != "$"):
-            continue
-
-        dollar_sign_count += 1
-
-    if (dollar_sign_count % 2 == 1):
-        return []
-
-    backtick_count = 0
-
-    delimiter_length = len(delimiter)
-    match = string[first_index:second_index + delimiter_length]
-
-    return [match] + find_matches(delimiter, string[second_index + delimiter_length:])
-
-
-def format_text_line(line):
-    # Check for bolded
-    bolded = find_matches("**", line) # Any text of the form: **text**
-
-    for match in bolded:
-        line = line.replace(match, "<strong>" + match[2:-2] + "</strong>") # Replace **'s with html tags
-
-    # Check for italicized
-    italicized = find_matches("*", line) + find_matches("_", line) # Italics denoted by *text* or _text_
-
-    for match in italicized:
-        line = line.replace(match, "<em>" + match[1:-1] + "</em>") # Replace * or _ with html tags
-
-    # Check for inline code
-    inline_code = find_matches("`", line) # Any text of the form: `text`
-
-    for match in inline_code:
-        line = line.replace(match, "<code>" + match[1:-1] + "</code>") # Replace ` with html tags
-    
-    return line
-
-
-def format_text_environment(lines, text_environment_indexes):
-    for i in text_environment_indexes:
-        lines[i] = format_text_line(lines[i])
-        lines[i] = "<p>" + lines[i] + "</p>"
-
-    return lines
-
-
 def format_md_content(md_content):
-    html_body_content = ""
-
     lines = md_content.split("\n") # Create a list of all lines in markdown content
 
+    # Remove all empty lines
     while "" in lines:
-        lines.remove("") # Remove all empty lines
+        lines.remove("") 
 
-    text_environment_indexes = text_format.check_for_text_environment(lines)
-
+    text_format.format_text_environment(lines)
     math_format.format_math_environment(lines)
-    
     code_format.format_code_environment(lines)
 
-    
-    # Treat the remaining lines as plain text
-    format_text_environment(lines, text_environment_indexes)
+    html_body_content = ""
 
     # Sum the content into html format
     for line in lines:
