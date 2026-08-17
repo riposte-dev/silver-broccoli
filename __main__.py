@@ -5,6 +5,7 @@ import text_format
 import math_format
 import code_format
 import blockquote_format
+import image_format
 
 PATH_INPUT = "./input/" # Directory for all source files in markdown
 PATH_OUTPUT = "./output/" # Directory for all generated html
@@ -23,6 +24,7 @@ def format_md_content(md_content):
     math_format.format_math_environment(lines)
     code_format.format_code_environment(lines)
     blockquote_format.format_blockquotes(lines)
+    image_format.format_image(lines)
 
     html_body_content = ""
 

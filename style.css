@@ -1,5 +1,5 @@
 * {
-    /* outline: 2px solid red; */
+    outline: 2px solid red;
 }
 
 body {
@@ -9,6 +9,11 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 
     max-width: 50%;
+    margin: auto;
+}
+
+img {
+    max-width: 80%;
     margin: auto;
 }
 
