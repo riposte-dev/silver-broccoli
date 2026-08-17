@@ -11,5 +11,6 @@ Sendai currently supports the following:
 - Code
     - Syntax highlighting (PrismJS)
 - Horizontal rules
+- Images
 
 Please note that Sendai is still in *early* development!
