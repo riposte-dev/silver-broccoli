@@ -8,7 +8,7 @@ Parse to html like so:
 For now, assume that any image is embedded on its own new line
 """
 
-SYMBOLS = ["[", "](", ")"]
+SYMBOLS = ["![", "](", ")"]
 
 def check_for_image(string):
     symbol_indexes = []
@@ -30,7 +30,7 @@ def check_for_image(string):
     second_index = symbol_indexes[1]
     third_index = symbol_indexes[2]
 
-    alt_text = string[first_index + 1:second_index]
+    alt_text = string[first_index + 2:second_index]
     path_to_image = string[second_index + 2: third_index]
 
     return [alt_text, path_to_image]
@@ -48,8 +48,4 @@ def format_image(lines):
         index = lines.index(line)
 
         lines[index] = "<img alt='" + alt_text + "' src='" + path_to_image + "'>"
-        print(lines[index])
 
-
-format_image("![alt text](path)")
-format_image("This is an image ![alt text](path)")
